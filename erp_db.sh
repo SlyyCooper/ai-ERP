@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# comprehensive_erp_db_setup_extreme.sh
+# erp_db.sh
 #
 # INTRODUCTION
 #
@@ -37,10 +37,10 @@
 # HOW TO USE:
 #
 #   1) Make this script executable on your system:
-#         chmod +x comprehensive_erp_db_setup_extreme.sh
+#         chmod +x erp_db.sh
 #
 #   2) Execute it:
-#         ./comprehensive_erp_db_setup_extreme.sh
+#         ./erp_db.sh
 #
 #   3) The script will:
 #       - pull the PostgreSQL 16 Docker image (if it’s not present locally),

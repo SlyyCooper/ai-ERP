@@ -5,11 +5,78 @@ You are in charge of the 'tangent' python package and the development of project
 <tree_structure>
 .
 ├── .cursorrules
-├── comprehensive_erp_db_setup_extreme.sh
+├── .git
+│   ├── COMMIT_EDITMSG
+│   ├── HEAD
+│   ├── branches
+│   ├── config
+│   ├── description
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   ├── sendemail-validate.sample
+│   │   ├── update.sample
+│   ├── index
+│   ├── info
+│   │   ├── exclude
+│   ├── logs
+│   │   ├── HEAD
+│   │   ├── refs
+│   │   │   ├── heads
+│   │   │   │   ├── main
+│   ├── objects
+│   │   ├── 00
+│   │   │   ├── ead4addc91471d8b095868ed4aa2320766e1aa
+│   │   ├── 0b
+│   │   │   ├── 38cd55b76d15d7a049e7b90b811f44b8e094da
+│   │   ├── 22
+│   │   │   ├── 45b763908651ac100c542a89902eaa60d751d9
+│   │   ├── 2a
+│   │   │   ├── fc181f694b7a2d41ce5e9cc2671363c1963926
+│   │   ├── 46
+│   │   │   ├── 8659a0b01f89ddd358bbdbac33e8b9b79bc447
+│   │   ├── 68
+│   │   │   ├── bc17f9ff2104a9d7b6777058bb4c343ca72609
+│   │   ├── 7f
+│   │   │   ├── 2a7403e11088a0243eb9fc1a8f1f0025fe4516
+│   │   ├── bc
+│   │   │   ├── 1745baade84399aefdcb9b62cb69ae3e278134
+│   │   ├── c0
+│   │   │   ├── cd77d18f0c6bb6881fafb8d366d6728844e85e
+│   │   ├── dd
+│   │   │   ├── 4d5f9423f15bc09b5ad6ca6b476fe1faf1db63
+│   │   ├── df
+│   │   │   ├── e0770424b2a19faf507a501ebfc23be8f54e7b
+│   │   ├── f6
+│   │   │   ├── 21adb4e9cc4058a25c5849714bcb16f5b7db8d
+│   │   ├── fe
+│   │   │   ├── a90b0b5f046058a80f5718594568c65fbd12b3
+│   │   ├── info
+│   │   ├── pack
+│   ├── refs
+│   │   ├── heads
+│   │   │   ├── main
+│   │   ├── tags
+├── .gitattributes
+├── .gitignore
+├── LICENSE
+├── README.md
+├── docs
+│   ├── db_structure.md
 ├── employees
 │   ├── accounting_manager.py
 │   ├── employee_management_agent.py
-├── entire_database_structure.md
+├── erp_db.sh
 </tree_structure>
 
 **IMPORTANT**
