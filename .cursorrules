@@ -1,0 +1,889 @@
+You are in charge of the 'tangent' python package and the development of projects using it.
+
+# Project Structure
+
+<tree_structure>
+.
+├── .cursorrules
+├── comprehensive_erp_db_setup_extreme.sh
+├── employees
+│   ├── accounting_manager.py
+│   ├── employee_management_agent.py
+├── entire_database_structure.md
+</tree_structure>
+
+**IMPORTANT**
+1. The Gateway Agent should be both:
+ - A direct executor (using tools directly for simple tasks)
+ - An orchestrator (delegating to specialized agents for complex tasks)
+2. All tool functions should return a Result object.
+3. The tool functions are defined in the tool file and then imported and wrapped by the agent.
+
+# Comprehensive ERP Database Structure Documentation
+
+## Overview
+This document outlines the complete structure of our enterprise-grade ERP database system. The database is organized into multiple modules, each handling specific business functions.
+
+## Modules Overview
+
+### 1. Global Configuration
+- **global_settings**: System-wide configuration parameters
+- **companies**: Parent companies information
+- **subsidiaries**: Subsidiary companies linked to parent companies
+- **currencies**: Supported currencies
+- **exchange_rates**: Currency exchange rates with different types
+
+### 2. User Management & Security
+- **erp_users**: System users
+- **erp_roles**: User roles (e.g., Administrator, Accounting Manager)
+- **erp_permissions**: Individual permissions
+- **erp_user_roles**: User-role assignments
+- **erp_role_permissions**: Role-permission assignments
+
+### 3. Financial Accounting
+- **chart_of_accounts**: Chart of accounts structure
+- **chart_of_accounts_attributes**: Additional account attributes
+- **fiscal_calendars**: Fiscal year definitions
+- **fiscal_periods**: Individual periods within fiscal years
+- **journal_entries**: General ledger entries
+- **journal_line_items**: Individual lines within journal entries
+
+### 4. Sales & Receivables
+- **customers**: Customer master data
+- **sales_orders**: Sales order headers
+- **so_lines**: Sales order line items
+- **invoices**: Customer invoices
+- **invoice_lines**: Invoice line items
+
+### 5. Purchasing & Payables
+- **vendors**: Vendor master data
+- **purchase_orders**: Purchase order headers
+- **po_lines**: Purchase order line items
+- **bills**: Vendor bills
+- **bill_lines**: Bill line items
+
+### 6. Inventory Management
+- **items**: Product/service master data
+- **inventory_transactions**: Stock movements
+- **lot_serials**: Lot/Serial number tracking
+- **lot_serial_transactions**: Lot/Serial movements
+- **bill_of_materials**: Product components/recipes
+- **manufacturing_orders**: Production orders
+
+### 7. Human Resources & Payroll
+- **employees**: Employee master data
+- **employee_benefits**: Employee benefits information
+- **pay_types**: Types of compensation
+- **pay_periods**: Payroll periods
+- **payroll_runs**: Payroll processing records
+- **payroll_run_details**: Individual payroll calculations
+
+### 8. Project Management
+- **projects**: Project master data
+- **project_tasks**: Project task breakdown
+- **project_costs**: Project-related costs
+- **timesheets**: Employee time tracking
+- **time_entries**: Individual time entries
+
+### 9. CRM & Marketing
+- **leads**: Sales leads
+- **marketing_campaigns**: Marketing campaign data
+- **carriers**: Shipping carriers
+- **shipments**: Shipment tracking
+
+### 10. Organizational Structure
+- **departments**: Department definitions
+- **locations**: Location/facility information
+- **classes**: Additional business segmentation
+
+### 11. Tax Management
+- **tax_jurisdictions**: Tax authority definitions
+- **tax_codes**: Tax rates and rules
+
+### 12. Budgeting & Planning
+- **budgets**: Budget headers
+- **budget_lines**: Budget line items
+- **consolidations**: Financial consolidation data
+
+### 13. Workflow & Approvals
+- **approval_workflows**: Workflow definitions
+- **approval_requests**: Approval tracking
+
+### 14. System Integration & Audit
+- **system_integrations**: External system connections
+- **scheduled_jobs**: Automated task scheduling
+- **audit_logs**: System audit trail
+- **document_attachments**: File attachments
+
+## Database Statistics
+- Total Tables: 50+ (excluding sequences)
+- Total Relations: 120+
+- Schema Owner: erp_user
+- Database Name: extreme_erp_database
+
+## Key Features
+1. Multi-company support
+2. Multi-currency handling
+3. Comprehensive audit trailing
+4. Workflow management
+5. Document management
+6. Integrated CRM
+7. Full supply chain management
+8. Manufacturing support
+9. Project management
+10. HR and Payroll processing
+
+## Technical Notes
+- All tables use SERIAL PRIMARY KEYs
+- UUID support for external references
+- Timestamp tracking on all tables
+- Proper foreign key constraints
+- Calculated columns where appropriate
+- JSONB support for flexible data storage
+
+## Detailed Table Structures
+
+### Companies Table (Core Table Example)
+The companies table is a central table that many other tables reference. It stores information about legal entities in the system.
+
+#### Columns:
+- **company_id** (integer, PK): Auto-incrementing primary key
+- **external_company_uuid** (uuid): Globally unique identifier, auto-generated
+- **company_name** (varchar[255]): Company's business name (required)
+- **company_legal_name** (varchar[255]): Official legal name
+- **tax_id_number** (varchar[50]): Tax identification number
+- **incorporation_country** (varchar[100]): Country of incorporation
+- **base_currency_code** (varchar[10]): Default currency for the company
+- **default_language** (varchar[10]): Default language code
+- **address_line1** (varchar[255]): Primary address
+- **address_line2** (varchar[255]): Secondary address
+- **city** (varchar[100]): City
+- **state_province** (varchar[100]): State or province
+- **country** (varchar[100]): Country
+- **postal_code** (varchar[50]): Postal/ZIP code
+- **phone** (varchar[50]): Contact phone number
+- **email** (varchar[100]): Contact email
+- **created_at** (timestamp): Record creation timestamp
+- **is_active** (boolean): Active status flag
+
+#### Referenced By:
+The companies table is referenced by many other tables, including:
+1. chart_of_accounts
+2. bills
+3. budgets
+4. fiscal_calendars
+5. classes
+6. consolidations
+7. customers
+8. departments
+9. employees
+10. erp_users
+11. invoices
+12. items
+13. journal_entries
+14. locations
+15. purchase_orders
+16. payroll_runs
+17. projects
+18. sales_orders
+19. subsidiaries
+20. vendors
+
+This extensive referencing demonstrates the central role of the companies table in the ERP system's data model.
+
+### Journal Entries Table (Financial Example)
+The journal_entries table is a core financial table that stores all accounting entries in the system.
+
+#### Columns:
+- **journal_entry_id** (integer, PK): Auto-incrementing primary key
+- **external_je_uuid** (uuid): Globally unique identifier for external reference
+- **entry_date** (date): Date of the journal entry (required)
+- **description** (text): Description of the transaction
+- **period_id** (integer): Reference to fiscal period (required)
+- **company_id** (integer): Reference to company (required)
+- **subsidiary_id** (integer): Reference to subsidiary (optional)
+- **posted** (boolean): Indicates if entry is posted to GL, defaults to false
+- **created_at** (timestamp): Record creation timestamp
+
+#### Relationships:
+- Foreign Keys:
+  - company_id → companies(company_id)
+  - period_id → fiscal_periods(period_id)
+  - subsidiary_id → subsidiaries(subsidiary_id)
+- Referenced By:
+  - journal_line_items: Contains the individual debit and credit lines
+
+This table is central to the financial accounting module, storing all journal entries that affect the general ledger.
+
+## Database Relationships Overview
+
+The database implements a complex web of relationships that ensure data integrity and support business processes. Key relationship examples:
+
+1. **Company Hierarchy**
+   - Companies → Subsidiaries (one-to-many)
+   - Companies → Departments (one-to-many)
+   - Companies → Locations (one-to-many)
+
+2. **Financial Structure**
+   - Companies → Chart of Accounts (one-to-many)
+   - Journal Entries → Journal Line Items (one-to-many)
+   - Fiscal Calendars → Fiscal Periods (one-to-many)
+
+3. **Business Transactions**
+   - Sales Orders → SO Lines (one-to-many)
+   - Purchase Orders → PO Lines (one-to-many)
+   - Invoices → Invoice Lines (one-to-many)
+
+4. **HR & Payroll**
+   - Employees → Timesheets (one-to-many)
+   - Payroll Runs → Payroll Run Details (one-to-many)
+   - Employees → Employee Benefits (one-to-many)
+
+## Data Integrity Features
+
+1. **Primary Keys**
+   - All tables have integer-based primary keys (SERIAL)
+   - UUID fields for external reference
+
+2. **Foreign Key Constraints**
+   - Proper referential integrity
+   - Cascading rules where appropriate
+
+3. **Default Values**
+   - Timestamps for audit trails
+   - Status flags with sensible defaults
+   - UUID generation for external references
+
+4. **Data Validation**
+   - NOT NULL constraints where required
+   - Check constraints for valid values
+   - Proper data type selection
+
+## Performance Considerations
+
+1. **Indexing**
+   - Primary key indexes on all tables
+   - Foreign key indexes
+   - Additional indexes on frequently queried fields
+
+2. **Data Types**
+   - Appropriate size limitations on VARCHAR fields
+   - Use of TEXT for unlimited string data
+   - NUMERIC(15,2) for financial amounts
+   - Proper date/time types
+
+3. **Storage**
+   - TOAST storage for large text fields
+   - Compression options available
+   - Proper column ordering
+
+# **tangent Python Library Documentation**
+
+### **Overview**
+
+The `core.py` module implements the main tangent system, which manages agent-based chat completions and function execution. It provides a flexible framework for handling conversational AI agents with support for tool calls, context management, and streaming responses.
+
+### **Class: tangent**
+
+#### **Description**
+
+The `tangent` class is the primary interface for managing AI agent interactions. It handles chat completions, function calls, and maintains conversation state across multiple turns.
+
+#### **Initialization**
+
+```python
+def __init__(self, client=None):
+    if not client:
+        client = OpenAI()
+    self.client = client
+```
+
+- The `tangent` class can be initialized with an optional OpenAI client.  
+- If no client is provided, it creates a default OpenAI client instance.
+
+# Tangent Python Library Documentation
+
+Welcome to the **Tangent** Python library documentation. **Tangent** is a high-level framework designed to facilitate conversational interactions and tool/agent orchestration using OpenAI-based Large Language Models (LLMs). This documentation provides a comprehensive guide on how to install, configure, and use **Tangent**, with detailed API references for each module, class, and function.
+
+---
+
+## Table of Contents
+
+1. [Overview](#overview)  
+2. [Installation](#installation)  
+3. [Quick Start Example](#quick-start-example)  
+4. [Package Structure](#package-structure)  
+5. [API Reference](#api-reference)  
+   - [1. `tangent.__init__`](#1-tangentinitpy)
+   - [2. `tangent.core`](#2-tangentcorepy)
+   - [3. `tangent.repl`](#3-tangentrepl)
+     - [3.1 `tangent.repl.__init__`](#31-tangentreplinitpy)
+     - [3.2 `tangent.repl.repl`](#32-tangentreplreplpy)
+   - [4. `tangent.types`](#4-tangenttypespy)
+   - [5. `tangent.util`](#5-tangentutilpy)
+6. [Additional Notes](#additional-notes)
+
+---
+
+## Overview
+
+**Tangent** provides:
+
+- A flexible `Agent` abstraction for describing how an AI assistant interacts with a user or environment.
+- Utility methods to handle **tool calls** (function calls) automatically invoked by the AI.
+- Support for streaming responses vs. one-shot completions.
+- A simple REPL (Read-Eval-Print Loop) interface for interactive experimentation.
+- Integration with [OpenAI Python bindings](https://github.com/openai/openai-python).
+
+At its core, **Tangent** handles:
+1. Sending chat history (messages) along with instructions to the LLM (OpenAI).
+2. Optionally handling function calls (tools) that the LLM requests to execute.
+3. Managing context variables across multiple chat turns.
+4. Streaming partial responses for interactive experiences or collecting them in a single response.
+
+---
+
+## Installation
+
+Because this documentation is based solely on the code provided (and does not specify a distribution method), you can install **Tangent** in one of two ways:
+
+1. **Cloning the Repository**  
+   Clone the repository containing the `tangent/` package into your local environment. Then install the package via:
+   ```bash
+   pip install -e .
+   ```
+   or ensure it is in your `PYTHONPATH`.
+
+2. **Manual Usage**  
+   Copy the `tangent/` folder into your project and reference it directly.
+
+Make sure you also install the dependencies:
+
+- `openai` (Required)  
+- `pydantic` (Required)  
+
+For example:
+```bash
+pip install openai pydantic
+```
+
+---
+
+## Quick Start Example
+
+Below is a simple example showing how to use the **Tangent** library to run an interactive loop with an `Agent`:
+
+```python
+from tangent import Agent, tangent
+from tangent.types import Response
+
+# 1. Define a simple function (tool) used by the agent
+def greet(name: str):
+    """
+    Greet a user by name.
+    """
+    return f"Hello, {name}!"
+
+# 2. Define an agent with instructions and a function
+my_agent = Agent(
+    name="GreeterAgent",
+    model="gpt-4o",
+    instructions="You are a friendly greeter. Use the greet function to greet users by name.",
+    functions=[greet],
+)
+
+# 3. Initialize the tangent runner
+client = tangent()
+
+# 4. Provide some initial chat messages
+messages = [
+    {"role": "user", "content": "Hi there, I'm John!"}
+]
+
+# 5. Run a single pass
+response: Response = client.run(
+    agent=my_agent,
+    messages=messages,
+    context_variables={},
+    stream=False,
+    debug=True
+)
+
+# 6. Print out the final messages
+for msg in response.messages:
+    print(f"{msg.get('sender', msg.get('role','assistant'))}: {msg['content']}")
+```
+
+---
+
+## Package Structure
+
+```
+tangent
+├── __init__.py
+├── core.py
+├── repl
+│   ├── __init__.py
+│   └── repl.py
+├── types.py
+└── util.py
+```
+
+### Overview of Each Module
+
+- **`tangent/__init__.py`**  
+  Exports high-level classes and methods such as:
+  - `tangent.tangent`
+  - `tangent.Agent`
+  - `tangent.Response`
+
+- **`tangent/core.py`**  
+  Contains the main `tangent` class, which orchestrates:
+  - Chat completions
+  - Tool calls
+  - Streaming vs. non-streaming run methods
+
+- **`tangent/repl/__init__.py`** and **`tangent/repl/repl.py`**  
+  Provides a CLI demonstration and helper methods to process streaming responses, as well as a simple REPL loop.
+
+- **`tangent/types.py`**  
+  Defines the Pydantic data models:
+  - `Agent`
+  - `Response`
+  - `Result`
+  Also re-exports or references classes from `openai.types.chat`.
+
+- **`tangent/util.py`**  
+  Provides internal utility functions (debug printing, chunk merging, function-to-JSON conversion, etc.).
+
+---
+
+## API Reference
+
+### 1. `tangent/__init__.py`
+
+```python
+from .core import tangent
+from .types import Agent, Response
+
+__all__ = ["tangent", "Agent", "Response"]
+```
+
+- **`tangent`**  
+  A reference to the `tangent.tangent` class in `core.py`. This is the main entry point for running chat completions and orchestrating tools.
+
+- **`Agent`**  
+  A Pydantic model from `tangent.types.Agent`.
+
+- **`Response`**  
+  A Pydantic model from `tangent.types.Response`.
+
+---
+
+### 2. `tangent/core.py`
+
+This file contains the primary `tangent` class and associated methods used for orchestrating chat flows with or without streaming. Below is a breakdown of the important contents.
+
+#### 2.1 Class: `tangent`
+
+```python
+class tangent:
+    def __init__(self, client=None):
+        ...
+```
+
+**Description**  
+The main orchestrator class. Manages conversation flow, obtains completions from OpenAI, interprets tool calls, and can run in a loop or stream results incrementally.
+
+**Parameters**  
+- `client`: *(optional)* An instance of the OpenAI client. If not provided, `tangent` instantiates a default `OpenAI()` client.
+
+---
+
+#### 2.2 Method: `get_chat_completion(...)`
+
+```python
+def get_chat_completion(
+    self,
+    agent: Agent,
+    history: List,
+    context_variables: dict,
+    model_override: str,
+    stream: bool,
+    debug: bool,
+) -> ChatCompletionMessage:
+    ...
+```
+
+**Description**  
+Generates a chat completion from the current conversation `history` using the provided `agent` and `context_variables`. Internally, it calls `self.client.chat.completions.create` with the necessary parameters. It also modifies the tool function parameters to remove internal context from the final LLM prompt.
+
+**Parameters**  
+- `agent` (`Agent`): The agent object containing instructions, model, and possible tool functions.  
+- `history` (`List`): A list of previous messages in the conversation. Each element is typically a dict with keys like `"role"` and `"content"`.  
+- `context_variables` (`dict`): Additional data for the agent (a dictionary of context variables).  
+- `model_override` (`str`): Optional model name to override the agent's default model.  
+- `stream` (`bool`): Whether to enable streaming from the LLM.  
+- `debug` (`bool`): If `True`, prints debug messages via `debug_print`.
+
+**Returns**  
+- `ChatCompletionMessage`: The raw completion message (OpenAI-specific type).
+
+---
+
+#### 2.3 Method: `handle_function_result(...)`
+
+```python
+def handle_function_result(self, result, debug) -> Result:
+    ...
+```
+
+**Description**  
+Interprets the return value from a tool call. This can be:
+- A `Result` object (already well-formed)
+- An `Agent` (wrapped into a `Result` object)
+- A plain string, dictionary, or something else (converted to a `Result` with `str(result)`).
+
+**Parameters**  
+- `result`: The raw result from calling an agent function.  
+- `debug` (`bool`): If `True`, logs debug output.  
+
+**Returns**  
+- `Result`: A standardized `Result` object containing `.value`, optional `.agent`, and `.context_variables`.
+
+---
+
+#### 2.4 Method: `handle_tool_calls(...)`
+
+```python
+def handle_tool_calls(
+    self,
+    tool_calls: List[ChatCompletionMessageToolCall],
+    functions: List[AgentFunction],
+    context_variables: dict,
+    debug: bool,
+) -> Response:
+    ...
+```
+
+**Description**  
+Executes one or more tool calls (functions). Each `tool_call` references the function name, arguments, and additional metadata. The function looks up the actual Python function by name in `functions`, executes it, and collects results as messages to be appended to the overall conversation.
+
+**Parameters**  
+- `tool_calls` (`List[ChatCompletionMessageToolCall]`): The list of tool calls requested by the LLM.  
+- `functions` (`List[AgentFunction]`): The list of actual agent functions the agent can call.  
+- `context_variables` (`dict`): The shared context dictionary.  
+- `debug` (`bool`): Whether to enable debug printing.
+
+**Returns**  
+- `Response`: A `Response` object containing any additional messages (tool results) plus updates to `context_variables` or the active `agent`.
+
+---
+
+#### 2.5 Method: `run_and_stream(...)`
+
+```python
+def run_and_stream(
+    self,
+    agent: Agent,
+    messages: List,
+    context_variables: dict = {},
+    model_override: str = None,
+    debug: bool = False,
+    max_turns: int = float("inf"),
+    execute_tools: bool = True,
+):
+    ...
+```
+
+**Description**  
+Initiates a conversation loop with an `agent` and yields tokens/chunks in real-time. This method is a **generator** that yields partial response data as the LLM streams responses.  
+
+At each turn:
+1. Sends the conversation history to the model.
+2. Streams the response chunk-by-chunk.
+3. If any tools are requested, it executes them and appends their outputs to the history.
+4. Updates `context_variables` and possibly switches `agent` if the returned `Result` includes a new agent.
+
+**Parameters**  
+- `agent` (`Agent`): The initial conversation agent.  
+- `messages` (`List`): The conversation history, usually a list of dicts.  
+- `context_variables` (`dict`, optional): Shared context data.  
+- `model_override` (`str`, optional): Overrides the agent’s model if set.  
+- `debug` (`bool`, optional): Enables debug logs if `True`.  
+- `max_turns` (`int`, optional): Maximum number of back-and-forth cycles.  
+- `execute_tools` (`bool`, optional): Whether to allow function calls.
+
+**Yields**  
+- Partial JSON-like dictionaries representing incremental response data, and eventually a final dictionary containing the full `Response`.
+
+---
+
+#### 2.6 Method: `run(...)`
+
+```python
+def run(
+    self,
+    agent: Agent,
+    messages: List,
+    context_variables: dict = {},
+    model_override: str = None,
+    stream: bool = False,
+    debug: bool = False,
+    max_turns: int = float("inf"),
+    execute_tools: bool = True,
+) -> Response:
+    ...
+```
+
+**Description**  
+A high-level method to manage conversation flow with optional streaming.  
+- If `stream` is `True`, it delegates to `run_and_stream`, returning a generator.  
+- If `stream` is `False`, it runs the conversation to completion synchronously and returns a final `Response`.
+
+**Parameters**  
+- `agent` (`Agent`): The conversation agent.  
+- `messages` (`List`): Conversation history.  
+- `context_variables` (`dict`, optional): Shared context dictionary.  
+- `model_override` (`str`, optional): Overriding model name.  
+- `stream` (`bool`, optional): If `True`, streaming mode.  
+- `debug` (`bool`, optional): Enables debug logging.  
+- `max_turns` (`int`, optional): Maximum loop iterations.  
+- `execute_tools` (`bool`, optional): If `True`, executes requested tool calls.
+
+**Returns**  
+- `Response`: Contains the conversation messages from the starting turn to the final turn, the last active `agent`, and any updated context variables.
+
+---
+
+### 3. `tangent/repl`
+
+#### 3.1 `tangent/repl/__init__.py`
+
+```python
+from .repl import run_demo_loop
+```
+
+Exports the `run_demo_loop` function, which is a handy method for an interactive CLI demo.
+
+#### 3.2 `tangent/repl/repl.py`
+
+Key functionalities:
+
+1. **`process_and_print_streaming_response(response)`**  
+   A helper function to consume a streaming generator from `tangent.run(..., stream=True)` and print out tokens as they arrive. It also detects the end of each chunk.
+
+   ```python
+   def process_and_print_streaming_response(response):
+       ...
+   ```
+
+2. **`pretty_print_messages(messages)`**  
+   A convenience function to format and print conversation messages, including any tool calls.
+
+   ```python
+   def pretty_print_messages(messages) -> None:
+       ...
+   ```
+
+3. **`run_demo_loop(starting_agent, context_variables=None, stream=False, debug=False) -> None`**  
+   Runs an interactive command-line loop:
+   - Prompts user input
+   - Appends it to a conversation history
+   - Calls `tangent.run` with the specified `agent`
+   - Prints the returned messages or streams them
+   - Updates the conversation state and repeats until termination
+
+   ```python
+   def run_demo_loop(
+       starting_agent, context_variables=None, stream=False, debug=False
+   ) -> None:
+       ...
+   ```
+
+Usage example:
+
+```bash
+python -m tangent.repl  # if an entry point is defined
+```
+
+Then follow the prompts in the terminal to interact with your agent.
+
+---
+
+### 4. `tangent/types.py`
+
+Defines the core data models, built with `pydantic`. Also references `openai.types.chat` internally.
+
+```python
+from openai.types.chat import ChatCompletionMessage
+from openai.types.chat.chat_completion_message_tool_call import (
+    ChatCompletionMessageToolCall,
+    Function,
+)
+```
+
+- **`AgentFunction`**  
+  ```python
+  AgentFunction = Callable[[], Union[str, "Agent", dict]]
+  ```
+  A convenient type alias for agent-related tool functions.
+
+---
+
+#### 4.1 Class: `Agent`
+
+```python
+class Agent(BaseModel):
+    name: str = "Agent"
+    model: str = "gpt-4o"
+    instructions: Union[str, Callable[[], str]] = "You are a helpful agent."
+    functions: List[AgentFunction] = []
+    tool_choice: str = None
+    parallel_tool_calls: bool = True
+```
+
+**Description**  
+Represents an AI agent configuration. This includes:
+- A `name` (default `"Agent"`).
+- The `model` name used for the LLM (default `"gpt-4o"`).
+- `instructions`, a string or callable that returns a string (the "system" message or prompt).
+- A list of `functions` (Python callables) that can be invoked by the LLM as "tools".
+- `tool_choice` (string) to specify a strategy or preference for tool usage (optional).
+- `parallel_tool_calls` (bool) indicating if multiple tool calls can be made in parallel (default `True`).
+
+---
+
+#### 4.2 Class: `Response`
+
+```python
+class Response(BaseModel):
+    messages: List = []
+    agent: Optional[Agent] = None
+    context_variables: dict = {}
+```
+
+**Description**  
+Encapsulates the final or intermediate result of a conversation step (or multiple steps).
+
+**Fields**  
+- `messages` (`List`): The updated conversation history messages.  
+- `agent` (`Optional[Agent]`): The last active agent after processing.  
+- `context_variables` (`dict`): The updated context variables after function calls or LLM responses.
+
+---
+
+#### 4.3 Class: `Result`
+
+```python
+class Result(BaseModel):
+    """
+    Encapsulates the possible return values for an agent function.
+
+    Attributes:
+        value (str): The result value as a string.
+        agent (Agent): The agent instance, if applicable.
+        context_variables (dict): A dictionary of context variables.
+    """
+
+    value: str = ""
+    agent: Optional[Agent] = None
+    context_variables: dict = {}
+```
+
+**Description**  
+Provides a flexible structure for any function return value. The `.value` is the main string output, `.agent` can replace the active agent, and `.context_variables` can update or override the conversation state.
+
+---
+
+### 5. `tangent/util.py`
+
+Contains various helper functions for internal usage.
+
+1. **`debug_print(debug: bool, *args: str) -> None`**  
+   Prints debugging information if `debug=True`. Prepends a timestamp and uses colored formatting.
+
+2. **`merge_fields(target, source)`**  
+   Recursively merges values from `source` dict into `target` dict (for partial chunk updates).
+
+3. **`merge_chunk(final_response: dict, delta: dict) -> None`**  
+   Merges a streaming delta chunk into a final response dictionary. Manages tool call indexing as well.
+
+4. **`function_to_json(func) -> dict`**  
+   Converts a Python function’s signature and docstring to a JSON-compatible dictionary structure. This is used to prepare the function schema for the LLM so it knows how to call tools.
+
+   ```python
+   def function_to_json(func) -> dict:
+       """
+       Converts a Python function into a JSON-serializable dictionary
+       that describes the function's signature, including its name,
+       description, and parameters.
+       """
+       ...
+   ```
+
+---
+## PostgreSQL Database Used 
+Let me help you find your PostgreSQL connection details:
+
+```bash
+/opt/homebrew/opt/postgresql@16/bin/psql -c "SHOW port;" postgres | cat
+```
+
+```bash
+/opt/homebrew/opt/postgresql@16/bin/psql -c "SHOW listen_addresses;" postgres | cat
+```
+
+
+Here are your PostgreSQL connection details:
+
+1. Connection URL format:
+```
+postgresql://tan@localhost:5432/postgres
+```
+
+2. Individual connection parameters:
+- Host: `localhost` (or `127.0.0.1`)
+- Port: `5432`
+- User: `tan`
+- Default database: `postgres`
+
+You can connect to it in several ways:
+
+1. **Using psql command line**:
+```bash
+/opt/homebrew/opt/postgresql@16/bin/psql -h localhost -p 5432 -U tan -d postgres
+```
+
+2. **Using a connection string**:
+```
+postgresql://tan@localhost:5432/postgres
+```
+
+3. **Using individual parameters**:
+```python
+# Python example with psycopg2
+{
+    "host": "localhost",
+    "port": "5432",
+    "user": "tan",
+    "dbname": "postgres"
+}
+```
+
+---
+
+## Additional Notes
+
+- **Context Variable Handling**: If you wish to pass additional data from one conversation turn to the next (e.g., user preferences, session data, etc.), you can store them in `context_variables`. **Tangent** automatically provides them to your tools that declare `context_variables` in their function signature.
+- **Streaming vs. Non-streaming**: When setting `stream=True` in the `run(...)` method, **Tangent** yields partial tokens as they arrive from the LLM. You can consume these tokens one at a time to build interactive UIs or real-time displays.
+- **Switching Agents**: A tool can return a `Result` with an `.agent` field, effectively switching to a new agent mid-conversation.
+- **Debugging**: Set `debug=True` in `run(...)` or `run_and_stream(...)` to see debug logs from **Tangent**, including messages sent to the LLM, tool calls, and partial tokens.
+
+## Conclusion
+
+**Tangent** is a straightforward yet flexible library for orchestrating multi-step conversations with LLMs, especially when function calls (tools) are involved. It provides:
+- Clear abstractions for an `Agent`’s instructions and available functions.
+- Automatic management of tool calls requested by the model.
+- Streaming or one-shot conversation flows.
+- Easy integration into a CLI environment (via `tangent/repl`).
