@@ -687,9 +687,6 @@ CREATE TABLE IF NOT EXISTS items (
         FOREIGN KEY (subsidiary_id) REFERENCES subsidiaries(subsidiary_id)
 );
 
--- Warehouse or distribution center references might also be stored in 'locations'
--- but we can add a specific table to handle multiple warehouses if needed.
-
 CREATE TABLE IF NOT EXISTS inventory_transactions (
     transaction_id         SERIAL PRIMARY KEY,
     item_id                INT NOT NULL,
@@ -705,7 +702,6 @@ CREATE TABLE IF NOT EXISTS inventory_transactions (
         FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
--- For manufacturing or assembly items, a Bill of Materials (BOM) is needed:
 CREATE TABLE IF NOT EXISTS bill_of_materials (
     bom_id                 SERIAL PRIMARY KEY,
     parent_item_id         INT NOT NULL,         -- The finished good or assembly
@@ -718,7 +714,6 @@ CREATE TABLE IF NOT EXISTS bill_of_materials (
         FOREIGN KEY (child_item_id) REFERENCES items(item_id)
 );
 
--- Manufacturing Orders to track production requests and statuses:
 CREATE TABLE IF NOT EXISTS manufacturing_orders (
     mo_id                  SERIAL PRIMARY KEY,
     mo_number              VARCHAR(50) NOT NULL UNIQUE,
@@ -735,7 +730,6 @@ CREATE TABLE IF NOT EXISTS manufacturing_orders (
         FOREIGN KEY (parent_item_id) REFERENCES items(item_id)
 );
 
--- Lot/Serial Tracking:
 CREATE TABLE IF NOT EXISTS lot_serials (
     lot_serial_id          SERIAL PRIMARY KEY,
     item_id                INT NOT NULL,
@@ -762,8 +756,6 @@ CREATE TABLE IF NOT EXISTS lot_serial_transactions (
 -- ======================================================================================
 -- MODULE 11: ORDER-TO-CASH (Sales Orders, Invoices, Payments)
 -- ======================================================================================
--- We expand upon these tables to account for advanced features such as partial shipments,
--- partial invoices, multiple fulfillment steps, etc.
 
 CREATE TABLE IF NOT EXISTS sales_orders (
     so_id                  SERIAL PRIMARY KEY,
@@ -868,6 +860,35 @@ CREATE TABLE IF NOT EXISTS invoice_lines (
     CONSTRAINT fk_invline_tax
         FOREIGN KEY (tax_code_id) REFERENCES tax_codes(tax_code_id)
 );
+
+-- --------------------------------------------------------------------------------------
+-- MODULE 11.1: Payment Methods and Bank Accounts (ADDED)
+-- --------------------------------------------------------------------------------------
+-- These two tables are required for foreign keys in the 'payments' table.
+
+CREATE TABLE IF NOT EXISTS payment_methods (
+    payment_method_id      SERIAL PRIMARY KEY,
+    method_name            VARCHAR(100) NOT NULL,   -- e.g., 'Check', 'Wire Transfer', 'Credit Card'
+    description            TEXT,
+    created_at             TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bank_accounts (
+    bank_account_id        SERIAL PRIMARY KEY,
+    bank_name              VARCHAR(255) NOT NULL,
+    account_number         VARCHAR(50) NOT NULL,
+    routing_number         VARCHAR(50),
+    account_holder_name    VARCHAR(255),
+    company_id             INT NOT NULL,
+    subsidiary_id          INT,
+    created_at             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_bankacct_company
+        FOREIGN KEY (company_id) REFERENCES companies(company_id),
+    CONSTRAINT fk_bankacct_subsidiary
+        FOREIGN KEY (subsidiary_id) REFERENCES subsidiaries(subsidiary_id)
+);
+
+-- Now we can safely create the payments table that references the above.
 
 CREATE TABLE IF NOT EXISTS payments (
     payment_id             SERIAL PRIMARY KEY,
@@ -1518,6 +1539,19 @@ SELECT 'SuperWidget X', 'SWX-100', 'Inventory', 15.00, 30.00,
     (SELECT currency_id FROM currencies WHERE currency_code='USD'),
     1
 WHERE NOT EXISTS (SELECT 1 FROM items WHERE item_name='SuperWidget X');
+
+-- Payment Methods and Bank Accounts: sample data
+INSERT INTO payment_methods (method_name, description)
+VALUES
+    ('Check', 'Payment via check'),
+    ('Wire Transfer', 'Payment via wire transfer'),
+    ('Credit Card', 'Payment via credit card')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO bank_accounts (bank_name, account_number, routing_number, account_holder_name, company_id)
+VALUES
+    ('First National Bank', '123456789', '987654321', 'Super Global Corp Main', 1)
+ON CONFLICT DO NOTHING;
 
 -- Approval workflow example
 INSERT INTO approval_workflows (workflow_name, document_type, sequence_number, approval_role_id)
