@@ -199,7 +199,7 @@ def ensure_vectorstore_build() -> LocalVectorStore:
     5) Return store
     """
     store_path = "local_docs.index"
-    dimension = 1536  # for text-embedding-3-small
+    dimension = 3072  # for text-embedding-3-large
 
     store = LocalVectorStore(dimension=dimension, index_path=store_path)
     if len(store.doc_meta) > 0 and store.index.ntotal > 0:
@@ -228,7 +228,7 @@ def ensure_vectorstore_build() -> LocalVectorStore:
         for ch in chunked:
             try:
                 embres = client.embeddings.create(
-                    model="text-embedding-3-small",
+                    model="text-embedding-3-large",
                     input=ch
                 )
                 embedding = embres.data[0].embedding
@@ -267,7 +267,7 @@ def search_local_docs(query: str, top_k: int = 3) -> Result:
             return Result(value="No OPENAI_API_KEY. Cannot embed queries.", context_variables={})
 
         embres = client.embeddings.create(
-            model="text-embedding-3-small",
+            model="text-embedding-3-large",
             input=query
         )
         q_embed = embres.data[0].embedding
