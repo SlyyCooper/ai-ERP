@@ -7,6 +7,7 @@ You are in charge of the 'tangent' python package and the development of project
 ├── .cursorrules
 ├── .git
 │   ├── COMMIT_EDITMSG
+│   ├── FETCH_HEAD
 │   ├── HEAD
 │   ├── branches
 │   ├── config
@@ -34,31 +35,79 @@ You are in charge of the 'tangent' python package and the development of project
 │   │   ├── refs
 │   │   │   ├── heads
 │   │   │   │   ├── main
+│   │   │   ├── remotes
+│   │   │   │   ├── origin
+│   │   │   │   │   ├── HEAD
+│   │   │   │   │   ├── main
 │   ├── objects
 │   │   ├── 00
 │   │   │   ├── ead4addc91471d8b095868ed4aa2320766e1aa
+│   │   ├── 07
+│   │   │   ├── b6a7719f6f83a62eb7b11d038e9b886ad9099d
+│   │   ├── 08
+│   │   │   ├── 0e114cf5846fdb40f0b9e31636ac4b1ea77814
 │   │   ├── 0b
 │   │   │   ├── 38cd55b76d15d7a049e7b90b811f44b8e094da
+│   │   ├── 0c
+│   │   │   ├── d4c2a0be1f2af9eb0fe789337ef3016e41ecd4
+│   │   ├── 12
+│   │   │   ├── 4dc4519448ff278a6f0c9f702521484c610802
+│   │   ├── 1a
+│   │   │   ├── 2b80acc9e8cf31a862572d7ad1a7f5e56b311e
 │   │   ├── 22
 │   │   │   ├── 45b763908651ac100c542a89902eaa60d751d9
 │   │   ├── 2a
 │   │   │   ├── fc181f694b7a2d41ce5e9cc2671363c1963926
+│   │   ├── 44
+│   │   │   ├── 341a66404aa45b7ea93045ed67b3043bd1ff75
 │   │   ├── 46
 │   │   │   ├── 8659a0b01f89ddd358bbdbac33e8b9b79bc447
+│   │   ├── 54
+│   │   │   ├── 00f56bf5b13729622464ae6191aaf13e23476e
+│   │   ├── 60
+│   │   │   ├── 02c23e54fc1fb8e934d974b72df9bb30eee34e
+│   │   ├── 67
+│   │   │   ├── 43e0770ad57508541e57611733c01379bec501
 │   │   ├── 68
 │   │   │   ├── bc17f9ff2104a9d7b6777058bb4c343ca72609
+│   │   ├── 6f
+│   │   │   ├── eea073d55948f6549a9c48686ed1968c7b13fb
+│   │   ├── 71
+│   │   │   ├── dfc41c16eea56950a5763ee37062733ea84f74
+│   │   ├── 74
+│   │   │   ├── 601e133b51761263fa4e71d366dffbfd28bdab
 │   │   ├── 7f
 │   │   │   ├── 2a7403e11088a0243eb9fc1a8f1f0025fe4516
+│   │   ├── 9d
+│   │   │   ├── f17016b6489add7e7b6962645e3cc441d1f5ed
+│   │   ├── a5
+│   │   │   ├── 5dc3c09ad4b5bf96ee4fe23122249c7e09099b
+│   │   ├── a6
+│   │   │   ├── 77b1fca005fe88fefe5891204a1ce623b95cef
+│   │   ├── a9
+│   │   │   ├── b9039f0e9ebf0b965cc01a35ab8edfb90686c7
+│   │   ├── ad
+│   │   │   ├── 6586676dd2c756f09d043908994424912a1ce9
+│   │   ├── b1
+│   │   │   ├── d41306aeb1ccac56f339e0b016e0764daa1c53
 │   │   ├── bc
 │   │   │   ├── 1745baade84399aefdcb9b62cb69ae3e278134
 │   │   ├── c0
 │   │   │   ├── cd77d18f0c6bb6881fafb8d366d6728844e85e
+│   │   ├── ce
+│   │   │   ├── 625293ce7b0c4c7f6270104327b92e03e06df8
 │   │   ├── dd
 │   │   │   ├── 4d5f9423f15bc09b5ad6ca6b476fe1faf1db63
 │   │   ├── df
 │   │   │   ├── e0770424b2a19faf507a501ebfc23be8f54e7b
+│   │   ├── e6
+│   │   │   ├── 47c14fff6980e039557f060ba573ef9e929f6a
+│   │   ├── e9
+│   │   │   ├── b44c0eb15dc9361b56169943a722226977a1a1
 │   │   ├── f6
 │   │   │   ├── 21adb4e9cc4058a25c5849714bcb16f5b7db8d
+│   │   ├── fc
+│   │   │   ├── 1c9b1e72165fa2a4eb0bff01fc4034030d9a4b
 │   │   ├── fe
 │   │   │   ├── a90b0b5f046058a80f5718594568c65fbd12b3
 │   │   ├── info
@@ -66,17 +115,29 @@ You are in charge of the 'tangent' python package and the development of project
 │   ├── refs
 │   │   ├── heads
 │   │   │   ├── main
+│   │   ├── remotes
+│   │   │   ├── origin
+│   │   │   │   ├── HEAD
+│   │   │   │   ├── main
 │   │   ├── tags
 ├── .gitattributes
 ├── .gitignore
 ├── LICENSE
 ├── README.md
+├── cli.py
 ├── docs
 │   ├── db_structure.md
 ├── employees
-│   ├── accounting_manager.py
-│   ├── employee_management_agent.py
+│   ├── accounting
+│   │   ├── accounting_manager.py
+│   ├── hr
+│   │   ├── employee_management_agent.py
+│   ├── r&d
+│   │   ├── document_research_agent.py
+│   │   ├── web_research_agent.py
 ├── erp_db.sh
+├── my-docs
+│   ├── sample_test.pdf
 </tree_structure>
 
 **IMPORTANT**
